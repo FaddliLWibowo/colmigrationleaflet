@@ -106,7 +106,7 @@
                 <option value='81001'>ARAUCA</option>
                 <option value='81065'>ARAUQUITA</option>
                 <option value='5051'>ARBOLETES</option>
-                <option value='5055'>ARGELIA</option>
+                <option value='5055'>ARGELIA DE MARÍA</option>
                 <option value='19050'>ARGELIA</option>
                 <option value='63001'>ARMENIA</option>
                 <option value='73067'>ATACO</option>
@@ -481,8 +481,6 @@
     <!-- D3 -->
     <script src="js/d3.v3.min.js"></script>
     <!-- jquery-csv -->
-    <script src="js/svg-anim-opt.js"></script>
-    <!-- jquery-csv -->
     <script src="js/jquery.csv.min.js"></script>
 
     
@@ -496,11 +494,11 @@
 
         //Carto DarkMatter tiles attribution and URL
         var cartoLink = '<a href="http://cartodb.com/attributions">&copy;CartoDB</a>',
-        	cartoURL = 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+        	cartoURL = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
         	cartoAttrib = RNVLink + ' | ' + C4SRLink + ' | ' + OSMLink + ' | ' + cartoLink;
 
         //Carto DarkMatter NOLABELS tiles attribution and URL
-        var cartoURL_NL = 'http://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png';
+        var cartoURL_NL = 'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png';
 
         var cartoMap = L.tileLayer(cartoURL, {
             attribution: cartoAttrib
