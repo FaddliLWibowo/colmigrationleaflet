@@ -1,0 +1,200 @@
+.navbar-brand {
+	font-size: 1.7em;
+}
+
+.navbar{
+	margin-bottom: 0px;
+}
+
+html, body{
+	height: 100%;
+	margin:0;
+	padding:0;
+	flex-flow: row wrap;
+}
+
+#map{
+	height: calc(100vh - 52px);
+}
+
+.legend{
+	float: left;
+	padding: 20px;
+	min-width: 200px;
+	width: 400px;
+	height: calc(100vh - 52px);
+	flex-flow: row wrap;
+	text-align: center;
+}
+
+#svg-rules{
+	float: right;
+	height: 0px;
+	width: 0px;
+	z-index: -1;
+}
+
+.bar-legend{
+	float: left;
+	font-size: 0.1em;
+}
+
+.legend-text {
+	font-size: 0.9em;
+	color: #FFFFFF;
+}
+
+.bar-legend {
+	width: 12.5%;
+}
+
+.legend-num{
+	width:12.5%;
+	text-align:left;
+	float:left;
+	font-size: 0.75em;
+}
+
+#animationControl {
+	float: left;
+	text-align: left;
+	vertical-align: middle;
+}
+
+.buttons-panel {
+	float: left;
+	text-align: left;
+}
+
+.dropdown-list {
+	font-size: 0.8em;
+	margin-right: 3px;
+	float:left;
+}
+
+select {
+	height: 23px;
+}
+
+.circle-legend {
+	stroke: #FFFFFF;
+	stroke-width: 1.5;
+	fill-opacity: 0;
+}
+
+.legend2 {
+	float: left;
+	text-align: left;
+}
+
+.legend-text-s > p {
+	font-size: 0.75em;
+	color: #FFFFFF;
+	line-height: 17px;
+}
+
+ .legend-text-m {
+	font-size: 1.1em;
+	color: #FFFFFF;
+	line-height: 17px;
+	text-align: center;
+	display: flex;
+	align-content: center;
+	flex-direction: column;
+}
+
+#selWarning {
+	font-size: 0.90em;
+	text-align: left;
+}
+
+.btn-xs{
+	/*font-size: 1em;*/
+}
+
+/* LEAFLET OVERRIDE */
+.leaflet-container .leaflet-control-attribution {
+	background: rgba(255, 255, 255, 0.2);
+	color: #cccccc;
+}
+.leaflet-control-attribution a {
+	color: #cccccc;
+}
+.leaflet-control-attribution a:hover {
+	color: #2a9fd6;
+}
+
+.leaflet-disabled{
+	background: #888888;
+}
+
+.leaflet-control-layers {
+    background: #424242;
+    color: #DDDDDD;
+}
+
+.leaflet-bar a {
+    background-color: #424242;
+    color: #ffffff;
+}
+
+.leaflet-bar a:hover {
+    background-color: #888888;
+    color: #ffffff;
+}
+
+/* TOOGLE SLIDER */
+/* The switch - the box around the slider */
+	.switch {
+	  position: relative;
+	  display: inline-block;
+	  width: 24px;
+	  height: 14px;
+	  vertical-align: middle;
+	  float: left;
+	}
+
+	/* Hide default HTML checkbox */
+	.switch input {display:none;}
+
+	/* The slider */
+	.slider {
+	  position: absolute;
+	  cursor: pointer;
+	  top: 0;
+	  left: 0;
+	  right: 0;
+	  bottom: 0;
+	  background-color: #ccc;
+	  -webkit-transition: .5s;
+	  transition: .5s;
+	  float: none;
+	  vertical-align: middle;
+
+	}
+
+	.slider:before {
+	  position: absolute;
+	  content: "";
+	  height: 10px;
+	  width: 10px;
+	  left: 2px;
+	  bottom: 2px;
+	  background-color: white;
+	  -webkit-transition: .5s;
+	  transition: .5s;
+	}
+
+	input:checked + .slider {
+	  background-color: #FF8800;
+	}
+
+	input:focus + .slider {
+	  box-shadow: 0 0 1px #FF8800;
+	}
+
+	input:checked + .slider:before {
+	  -webkit-transform: translateX(10px);
+	  -ms-transform: translateX(10px);
+	  transform: translateX(10px);
+	}
