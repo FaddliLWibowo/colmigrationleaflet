@@ -494,11 +494,11 @@
 
         //Carto DarkMatter tiles attribution and URL
         var cartoLink = '<a href="http://cartodb.com/attributions">&copy;CartoDB</a>',
-        	cartoURL = 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+        	cartoURL = 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png',
         	cartoAttrib = RNVLink + ' | ' + C4SRLink + ' | ' + OSMLink + ' | ' + cartoLink;
 
         //Carto DarkMatter NOLABELS tiles attribution and URL
-        var cartoURL_NL = 'https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png';
+        var cartoURL_NL = 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_nolabels/{z}/{x}/{y}.png';
 
         var cartoMap = L.tileLayer(cartoURL, {
             attribution: cartoAttrib
