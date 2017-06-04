@@ -75,7 +75,7 @@
         </div>
         <br><br><br>
         <div>
-            <div class="legend2 legend-text-m" style="width:50%; line-height: 14px;"><p><br>NUMBER OF<br>PEOPLE AFFECTED<p></div>
+            <div class="legend2 legend-text-m" style="width:50%; line-height: 14px;"><p><br>TOTAL NUMBER OF<br> PEOPLE AFFECTED<p></div>
             <div class="legend2">
                 <svg width="50" height="50">
                     <circle class="circle-legend" cx="25" cy="40" r="7" stroke-dasharray="4,4" />
@@ -374,7 +374,26 @@
         <div id="selWarning">
             <p class="text-warning">Select a municipality from the list or by clicking the map.</p>
         </div>
-
+        <div class="">
+            
+        </div>
+        <div id ="infoBars" style="display: none;">
+            <h4 id="munName" style="text-align: left;"></h4>
+            <h6 id="subMunName">Displacement Statistics</h6>
+            <div id="pop1985" class="bar"></div>
+            <p id="pop1985text" class="stat-text"></p>
+            <div id="pop2015" class="bar"></div>
+            <p id="pop2015text" class="stat-text"></p>
+            <div id="statOut" class="bar"></div>
+            <p id = "statOutText" class="stat-text"></p>
+            <div id ="statIn" class="bar"></div>
+            <p id = "statInText" class="stat-text"></p>
+            <div id ="statInternal" class="bar"></div>
+            <p id="statInternalText" class="stat-text"></p>
+            <div id ="statTotal" class="bar"></div>
+            <p id = "statTotalText" class="stat-text"></p>
+        </div>
+ 
 
     </div>
 
@@ -622,10 +641,8 @@
         // Initially hide the paths buttons
         showHidePathButtons();
         // GLOBAL VARIABLES: Selected Municipality
-        var selectedMun = null,
-            selectedLat = null,
-            selectedLng = null;
-            selectedCoords = null;
+        var selectedMun = {};
+ 
 
   
         /* FUNCTIONS */
@@ -668,13 +685,15 @@
         // Show individual municipality
         function showAll(feature, layer){
             layer.on('click', function(event) {
-                var originClass = ".O" + parseInt(feature.properties.DPNP),
-                    destinyClass = ".D" + parseInt(feature.properties.DPNP);
+                selectedMun.ID = parseInt(feature.properties.DPNP);
+                selectedMun.Coords = event.latlng;
+                selectedMun.Lat = selectedMun.Coords.lat;
+                selectedMun.Lng = selectedMun.Coords.lng;
+
+                var originClass = ".O" + selectedMun.ID,
+                    destinyClass = ".D" + selectedMun.ID;
                 
-                selectedMun = parseInt(feature.properties.DPNP);
-                selectedCoords = event.latlng;
-                selectedLat = selectedCoords.lat;
-                selectedLng = selectedCoords.lng;
+                
                 //console.log(selectedMun, selectedLat, selectedLng);
                 panToSelectedMun();
                 showHidePathButtons();
@@ -685,13 +704,14 @@
                 d3.selectAll(originClass +"," + destinyClass) 
                     .attr("stroke-opacity", 1);
                 //Change dropdown list value
-                $("#munList").val(selectedMun);
+                $("#munList").val(selectedMun.ID).change();
+                updateBars();
             });
         };
 
         // Pan/Zoom to selected municipality
         function panToSelectedMun(){
-            map.panTo(selectedCoords, {
+            map.panTo(selectedMun.Coords, {
                 animate: true,
                 duration: 1,
             });
@@ -699,18 +719,21 @@
 
         // Reset default view on double click: show all linePaths
         function resetPath(){
-            selectedMun = null;
+            selectedMun = {};
+            $("#munList").val("default");
             showHidePathButtons();
             showAllPaths();
             d3.selectAll(".linePath") 
                 .attr("stroke-opacity", 1);
+            d3.select("#infoBars")
+                .style("display", "none");
         };
 
         // Show paths going outside Municipality
         function showOutPaths(){
-            var outQuery = ".O" + selectedMun;
+            var outQuery = ".O" + selectedMun.ID;
             hideAll();
-            console.log(selectedMun, outQuery);
+            console.log(selectedMun.ID, outQuery);
             d3.selectAll(outQuery) 
                 .attr("stroke-opacity", 1);
             d3.select("#button-out")
@@ -727,9 +750,9 @@
 
         // Show paths going inside Municipality
         function showInPaths(){
-            var inQuery = ".D" + selectedMun;
+            var inQuery = ".D" + selectedMun.ID;
             hideAll();
-            console.log(selectedMun, inQuery);
+            console.log(selectedMun.ID, inQuery);
             d3.selectAll(inQuery) 
                 .attr("stroke-opacity", 1);
 
@@ -747,9 +770,9 @@
 
         // Show all paths going in/out Municipality
         function showAllPaths(){
-            var allQuery = ".D" + selectedMun + ", .O" + selectedMun;
+            var allQuery = ".D" + selectedMun.ID + ", .O" + selectedMun.ID;
             hideAll();
-            console.log(selectedMun, allQuery);
+            console.log(selectedMun.ID, allQuery);
             d3.selectAll(allQuery) 
                 .attr("stroke-opacity", 1);
             d3.select("#button-all")
@@ -766,7 +789,7 @@
 
         // Show/Hide buttons controlling the path's display
         function showHidePathButtons(){
-           if(selectedMun == null){
+           if(jQuery.isEmptyObject(selectedMun)){
                 d3.selectAll(".btn")
                     .style("display","none");
             }
@@ -779,7 +802,7 @@
         };
 
         function munFromList(){
-            selectedMun = $("#munList").val();
+            selectedMun.ID = $("#munList").val();
             panToSelectedMun();
             showAll();
         };
@@ -819,27 +842,61 @@
 
             hideAll();
             //Show municipality linePaths
-            var originClass = ".O" + selectedMun,
-                destinyClass = ".D" + selectedMun;
+            var originClass = ".O" + selectedMun.ID,
+                destinyClass = ".D" + selectedMun.ID;
             d3.selectAll(originClass +"," + destinyClass) 
                 .attr("stroke-opacity", 1);
         };
 
         function getObjectInArray(array) {
-            selectedMun = parseInt($("#munList").val());    
+            selectedMun.ID = parseInt($("#munList").val());    
             for (var i = 0; i < array.length; i++) {
-                if (parseInt(array[i].DPNP) === selectedMun){
-                    selectedLat = array[i].latitude;
-                    selectedLng = array[i].longitude;
-                    selectedCoords = new L.latLng(array[i].latitude, array[i].longitude);
+                if (parseInt(array[i].DPNP) === selectedMun.ID){
+                    selectedMun.Lat = array[i].latitude;
+                    selectedMun.Lng = array[i].longitude;
+                    selectedMun.Coords = new L.latLng(array[i].latitude, array[i].longitude);
+                    
+                    selectedMun.Out = parseInt(array[i].Desplazado);
+                    selectedMun.In = parseInt(array[i].Refugiados);
+                    selectedMun.Internal = parseInt(array[i].IDPs);
+                    selectedMun.Total = parseInt(array[i].TotalImpct);
+                    selectedMun.Pop1985 = parseInt(array[i].Pop1985);
+                    selectedMun.Pop2015 = parseInt(array[i].Pop2015);
                 }
             }
+            selectedMun.Name = $("#munList option:selected").html();
             showAllList();
             panToSelectedMun();
+            updateBars();
         };
 
+        function updateBars(){
+            $("#munName").html(selectedMun.Name);
 
+            var maxBarLen = Math.max(selectedMun.In, selectedMun.Out, selectedMun.Total, 
+                selectedMun.Internal, selectedMun.Pop1985, selectedMun.Pop2015);
+            
+            $("#pop1985").animate({'width':''+100*selectedMun.Pop1985/maxBarLen+"%"},800);
+            $("#pop2015").animate({'width':''+100*selectedMun.Pop2015/maxBarLen+"%"},800);
+            $("#statOut").animate({'width':''+100*selectedMun.Out/maxBarLen+"%"},800);
+            $("#statIn").animate({'width':''+100*selectedMun.In/maxBarLen+"%"},800);
+            $("#statInternal").animate({'width':''+100*selectedMun.Internal/maxBarLen+"%"},800);
+            $("#statTotal").animate({'width':''+100*selectedMun.Total/maxBarLen+"%"},800);
+            
+            if (selectedMun.Pop1985 == 0){
+                $("#pop1985text").html("1985 Population: -MISSING STATISTICS-");
+            } else{
+                $("#pop1985text").html("1985 Population: " + selectedMun.Pop1985);
+            };
+            $("#pop2015text").html("2015 Population: " + selectedMun.Pop2015);
+            $("#statOutText").html("# People displaced FROM: " + selectedMun.Out);
+            $("#statInText").html("# People displaced TO: " + selectedMun.In);
+            $("#statInternalText").html("# People displaced WITHIN: " + selectedMun.Internal);
+            $("#statTotalText").html("# People displaced TOTAL: " + selectedMun.Total);
 
+            d3.select("#infoBars")
+                    .style("display","inline");
+        };
         
         
     </script>
