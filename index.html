@@ -44,14 +44,14 @@
             <div style="width:33.3%; text-align:right; float:left;"><p>DESTINATION</p></div>
         </div>
         <div class="legend-bar">
-            <div class="bar-legend" style="height:0.7px;background:#FF7111;"></div>
-            <div class="bar-legend" style="height:0.7px;background:#FF944C;"></div>
-            <div class="bar-legend" style="height:2px;background:#FFB989;"></div>
-            <div class="bar-legend" style="height:2px;background:#FFFFFF;"></div>
-            <div class="bar-legend" style="height:3px;background:#EBF6F9;"></div>
-            <div class="bar-legend" style="height:4px;background:#D6ECF4;"></div>
-            <div class="bar-legend" style="height:5px;background:#C2E3EF;"></div>
-            <div class="bar-legend" style="height:6px;background:#ABD9E9;"></div>
+            <div class="bar-legend" style="height:2px;background:#FF7111;"></div>
+            <div class="bar-legend" style="height:2px;background:#FF944C;"></div>
+            <div class="bar-legend" style="height:3px;background:#FFB989;"></div>
+            <div class="bar-legend" style="height:3px;background:#FFFFFF;"></div>
+            <div class="bar-legend" style="height:4px;background:#EBF6F9;"></div>
+            <div class="bar-legend" style="height:5px;background:#D6ECF4;"></div>
+            <div class="bar-legend" style="height:6px;background:#C2E3EF;"></div>
+            <div class="bar-legend" style="height:7px;background:#ABD9E9;"></div>
         </div>
         <div>
             <div class="legend-num"><p> >2500 </p></div>
@@ -89,7 +89,7 @@
         
         <br><br><br><br>
         <div class="buttons-panel">
-            <select id="munList" class="dropdown-list" onchange="getObjectInArray(munArray)">
+            <select id="munList" class="dropdown-list" onchange="getMunFromArray(munArray)">
                 <option value="default" selected disabled hidden>Choose a Municipality</option>
                 <option value='5002'>ABEJORRAL</option>
                 <option value='50006'>ACACÍAS</option>
@@ -424,7 +424,7 @@
                 <stop offset="95%" stop-color="#abd9e9"/>
             </linearGradient>
 
-            <linearGradient id="N" x1="0" x2="1" y1="1" y2="0">
+            <linearGradient id="N" x1="1" x2="1" y1="1" y2="0">
                 <stop offset="5%" stop-color="#FF7111"/>
                 <stop class="offset50" offset="50%" stop-color="white" stop-opacity="0.25">
                 <animate attributeName="" dur="3s" values="0;1.5"
@@ -479,14 +479,12 @@
             </linearGradient>
         </defs>
     </svg>  
-    
 
     <!-- ########################################  -->
     <!-- ###########    JAVASCRIPT    ###########  -->
     <!-- ########################################  -->
 
     <!-- ___________ LOADING OF REQUIRED LIBRARIES ___________  -->
-   
     <!-- Leaflet library -->
     <script src="js/leaflet.js"></script>
     <!-- jQuery -->
@@ -501,8 +499,6 @@
     <script src="js/d3.v3.min.js"></script>
     <!-- jquery-csv -->
     <script src="js/jquery.csv.min.js"></script>
-
-    
     <!-- ___________ END OF LIBRARIES LOADING ___________  -->
 
     <script type="text/javascript">
@@ -559,14 +555,14 @@
 
         //Redefine double click to reset path display
         map.on("dblclick", function(event){
-            resetPath();
+            resetPaths();
         });
 
         // START ------------- Municipalities Layer
         var munCustomLayer = null;
 
         munCustomLayer = L.geoJson(null, {
-            onEachFeature: showAll,
+            onEachFeature: showSelectedMun,
 
             filter: function (feature, layer) {
                  return feature.properties.TotalImpct > 10000;
@@ -624,7 +620,7 @@
                     feature.properties["stroke"] = "url(#" + direction + ")";
 
                     return {
-                        className: "linePath D" + feature.properties.Dest + " O" + feature.properties.Origin + " " + feature.properties.stroke,
+                        className: "linePath D" + feature.properties.Dest + " O" + feature.properties.Origin + " " + feature.properties.stroke.replace(/#/,"").replace(/\(/,"").replace(/\)/,""),
                         weight: getLineWeight(feature.properties.Count),
                         color: feature.properties.stroke,
                     };
@@ -640,22 +636,50 @@
 
         // Initially hide the paths buttons
         showHidePathButtons();
-        // GLOBAL VARIABLES: Selected Municipality
-        var selectedMun = {};
- 
 
+        // GLOBAL VARIABLES: Selected Municipality object declaration
+        var selectedMun = {},
+            munArray;
+
+        /* PATHS BUTTONS */
+        $("#button-out").click(showOutPaths);
+        $("#button-in") .click(showInPaths);
+        $("#button-all").click(showAllPaths);
+
+        // Toggle animation checkbox
+        $( '#animateToggle' ).change(function(){
+            if ($( '#animateToggle' ).prop('checked')){
+                d3.selectAll("animate")
+                    .attr("attributeName", "offset");
+            }
+            else {
+                d3.selectAll("animate")
+                    .attr("attributeName", "");
+            }  
+        });
+
+        // Load statistics data from .csv
+        $.ajax({
+            url: "data/Municipios_Resumen_num.csv",
+            async: true,
+            success: function (csvd) {
+                munArray = $.csv.toObjects(csvd);
+            },
+            dataType: "text",
+            complete: function(){console.log("CSV loaded in", Date.now()-timerStart, "ms")},
+        });
   
-        /* FUNCTIONS */
+        /* _________ FUNCTIONS _________ */
         // Calculate the line weight based on # of affected people
         function getLineWeight(c) {
-            return  c > 40000  ? 6 :
-                    c > 30000  ? 5 :
-                    c > 20000  ? 4 :
-                    c > 10000  ? 3 :
-                    c > 5000   ? 2 :
-                    c > 2500   ? 0.7 :
-                    c > 1000   ? 0.4 :
-                                 0.2;
+            return  c > 40000  ? 7 :
+                    c > 30000  ? 6 :
+                    c > 20000  ? 5 :
+                    c > 10000  ? 4 :
+                    c > 5000   ? 3 :
+                    c > 2500   ? 2 :
+                    c > 1000   ? 0.7 :
+                                 0.3;
         };
 
         // Calculate line direction
@@ -676,14 +700,14 @@
                                       "E";
         };
 
-     // Hide all paths
-        function hideAll(){
+        // Hide all paths
+        function hideAllPaths(){
             d3.selectAll(".linePath") //Hide all linePaths
                     .attr("stroke-opacity", 0);
         };
 
         // Show individual municipality
-        function showAll(feature, layer){
+        function showSelectedMun(feature, layer){
             layer.on('click', function(event) {
                 selectedMun.ID = parseInt(feature.properties.DPNP);
                 selectedMun.Coords = event.latlng;
@@ -693,13 +717,10 @@
                 var originClass = ".O" + selectedMun.ID,
                     destinyClass = ".D" + selectedMun.ID;
                 
-                
-                //console.log(selectedMun, selectedLat, selectedLng);
-                panToSelectedMun();
+                flyToSelectedMun();
                 showHidePathButtons();
                 showAllPaths();
-
-                hideAll();
+                hideAllPaths();
                 //Show municipality linePaths
                 d3.selectAll(originClass +"," + destinyClass) 
                     .attr("stroke-opacity", 1);
@@ -710,15 +731,16 @@
         };
 
         // Pan/Zoom to selected municipality
-        function panToSelectedMun(){
-            map.panTo(selectedMun.Coords, {
+        function flyToSelectedMun(){
+            map.flyTo(selectedMun.Coords, 8, {
                 animate: true,
                 duration: 1,
+                //noMoveStart: true,
             });
         };
 
         // Reset default view on double click: show all linePaths
-        function resetPath(){
+        function resetPaths(){
             selectedMun = {};
             $("#munList").val("default");
             showHidePathButtons();
@@ -732,8 +754,8 @@
         // Show paths going outside Municipality
         function showOutPaths(){
             var outQuery = ".O" + selectedMun.ID;
-            hideAll();
-            console.log(selectedMun.ID, outQuery);
+            hideAllPaths();
+            //console.log(selectedMun.ID, outQuery);
             d3.selectAll(outQuery) 
                 .attr("stroke-opacity", 1);
             d3.select("#button-out")
@@ -751,8 +773,8 @@
         // Show paths going inside Municipality
         function showInPaths(){
             var inQuery = ".D" + selectedMun.ID;
-            hideAll();
-            console.log(selectedMun.ID, inQuery);
+            hideAllPaths();
+            //console.log(selectedMun.ID, inQuery);
             d3.selectAll(inQuery) 
                 .attr("stroke-opacity", 1);
 
@@ -771,8 +793,8 @@
         // Show all paths going in/out Municipality
         function showAllPaths(){
             var allQuery = ".D" + selectedMun.ID + ", .O" + selectedMun.ID;
-            hideAll();
-            console.log(selectedMun.ID, allQuery);
+            hideAllPaths();
+            //console.log(selectedMun.ID, allQuery);
             d3.selectAll(allQuery) 
                 .attr("stroke-opacity", 1);
             d3.select("#button-all")
@@ -801,46 +823,12 @@
             }; 
         };
 
-        function munFromList(){
-            selectedMun.ID = $("#munList").val();
-            panToSelectedMun();
-            showAll();
-        };
-
-        /* PATHS BUTTONS */
-        $("#button-out").click(showOutPaths);
-        $("#button-in") .click(showInPaths);
-        $("#button-all").click(showAllPaths);
-
-        // Toggle animation checkbox
-        $( '#animateToggle' ).change(function(){
-            if ($( '#animateToggle' ).prop('checked')){
-                d3.selectAll("animate")
-                    .attr("attributeName", "offset");
-            }
-            else {
-                d3.selectAll("animate")
-                    .attr("attributeName", "");
-            }  
-        });
-
-        var munArray;
-        $.ajax({
-            url: "data/Municipios_Resumen_num.csv",
-            async: true,
-            success: function (csvd) {
-                munArray = $.csv.toObjects(csvd);
-            },
-            dataType: "text",
-            complete: function(){console.log("CSV loaded in", Date.now()-timerStart, "ms")},
-        });
-
-        function showAllList(){
-            panToSelectedMun();
+        // Show selected paths when Municipality is selected from list
+        function showSelectedMunFromList(){
+            flyToSelectedMun();
             showHidePathButtons();
             showAllPaths();
-
-            hideAll();
+            hideAllPaths();
             //Show municipality linePaths
             var originClass = ".O" + selectedMun.ID,
                 destinyClass = ".D" + selectedMun.ID;
@@ -848,28 +836,30 @@
                 .attr("stroke-opacity", 1);
         };
 
-        function getObjectInArray(array) {
+        // Get selected Municipality data from .csv read array 
+        function getMunFromArray(array) {
             selectedMun.ID = parseInt($("#munList").val());    
             for (var i = 0; i < array.length; i++) {
                 if (parseInt(array[i].DPNP) === selectedMun.ID){
                     selectedMun.Lat = array[i].latitude;
                     selectedMun.Lng = array[i].longitude;
                     selectedMun.Coords = new L.latLng(array[i].latitude, array[i].longitude);
-                    
-                    selectedMun.Out = parseInt(array[i].Desplazado);
-                    selectedMun.In = parseInt(array[i].Refugiados);
-                    selectedMun.Internal = parseInt(array[i].IDPs);
-                    selectedMun.Total = parseInt(array[i].TotalImpct);
-                    selectedMun.Pop1985 = parseInt(array[i].Pop1985);
-                    selectedMun.Pop2015 = parseInt(array[i].Pop2015);
+                    //Set selectedMun object properties
+                    selectedMun.Out         = parseInt(array[i].Desplazado);
+                    selectedMun.In          = parseInt(array[i].Refugiados);
+                    selectedMun.Internal    = parseInt(array[i].IDPs);
+                    selectedMun.Total       = parseInt(array[i].TotalImpct);
+                    selectedMun.Pop1985     = parseInt(array[i].Pop1985);
+                    selectedMun.Pop2015     = parseInt(array[i].Pop2015);
                 }
             }
             selectedMun.Name = $("#munList option:selected").html();
-            showAllList();
-            panToSelectedMun();
+            showSelectedMunFromList();
+            flyToSelectedMun();
             updateBars();
         };
 
+        // Update statistics bars and labels
         function updateBars(){
             $("#munName").html(selectedMun.Name);
 
@@ -897,7 +887,6 @@
             d3.select("#infoBars")
                     .style("display","inline");
         };
-        
         
     </script>
 </body>
