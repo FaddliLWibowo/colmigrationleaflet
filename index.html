@@ -549,6 +549,7 @@
         //Base layers addition
         L.control.layers(baseLayers).addTo(map);
         L.control.zoom({position: 'bottomright'}).addTo(map);
+        L.control.scale({metric: true, imperial: false,}).addTo(map);
 
         // Disable zoom on double click
         map.doubleClickZoom.disable();

@@ -141,7 +141,7 @@ select {
 }
 
 /* LEAFLET OVERRIDE */
-.leaflet-container .leaflet-control-attribution {
+.leaflet-container .leaflet-control-attribution{
 	background: rgba(136, 136, 136, 0.6);
 	color: #cccccc;
 }
@@ -169,6 +169,15 @@ select {
 .leaflet-bar a:hover {
     background-color: #888888;
     color: #ffffff;
+}
+
+.leaflet-control-scale-line {
+	border-right-color: #cccccc;
+	border-left-color: #cccccc;
+	border-bottom-color: #cccccc;
+	background: rgba(136, 136, 136, 0.5);
+	color: #cccccc;
+	margin: 1px;
 }
 
 /* TOOGLE SLIDER */
