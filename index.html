@@ -10,6 +10,7 @@
     <!-- ____________ CSS Styles __________ -->
     <!-- Leaflet Style Sheet -->
     <link rel="stylesheet" href="css/leaflet.css">
+    <link rel="stylesheet" href="css/leaflet-overview.css">
     <!-- Bootstrap CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <!-- Edited Personal Styling -->
@@ -487,6 +488,7 @@
     <!-- ___________ LOADING OF REQUIRED LIBRARIES ___________  -->
     <!-- Leaflet library -->
     <script src="js/leaflet.js"></script>
+    <script src="js/leaflet-overview.js"></script>
     <!-- jQuery -->
     <script src="js/jquery-3.2.1.min.js"></script>
     <!-- Bootstrap script
@@ -516,13 +518,20 @@
         var cartoURL_NL = 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_nolabels/{z}/{x}/{y}.png';
 
         var cartoMap = L.tileLayer(cartoURL, {
-            attribution: cartoAttrib
+            attribution: cartoAttrib,
+            updateWhenIdle: false
+        });
+        var cartoMap_OV = L.tileLayer(cartoURL, {
+            attribution: cartoAttrib,
+            updateWhenIdle: false
         });
         var cartoMap_NL = L.tileLayer(cartoURL_NL, {
-            attribution: cartoAttrib
+            attribution: cartoAttrib,
+            updateWhenIdle: false
         });
         var esriDarkGray = L.esri.basemapLayer('DarkGray', {
             attribution: RNVLink,
+            updateWhenIdle: false
         });
         //END
         //Map creation centered in Bogota
@@ -550,6 +559,7 @@
         L.control.layers(baseLayers).addTo(map);
         L.control.zoom({position: 'bottomright'}).addTo(map);
         L.control.scale({metric: true, imperial: false,}).addTo(map);
+        L.control.overview([cartoMap_OV, cartoMap_OV, cartoMap_OV]).addTo(map);
 
         // Disable zoom on double click
         map.doubleClickZoom.disable();
