@@ -39,7 +39,7 @@
         <h6>REPORTED 1985-2015</h6>
         <br/>
 
-        <div class="legend-text" style="height:2px;">
+        <div class="legend-text-s" style="height:2px;">
             <div style="width:33.3%; text-align:left; float:left;"><p>ORIGIN</p></div>
             <div style="width:33.3%; text-align:center; float:left;"><p>&rarr;</p></div>
             <div style="width:33.3%; text-align:right; float:left;"><p>DESTINATION</p></div>
@@ -367,9 +367,9 @@
                 <option value='13894'>ZAMBRANO</option>
                 <option value='5895'>ZARAGOZA</option>
             </select> 
-            <button class="btn btn-warning btn-xs" id="button-all">ALL</button>
-            <button class="btn btn-default btn-xs" id="button-in">INWARDS</button>
-            <button class="btn btn-default btn-xs" id="button-out">OUTWARDS</button>
+            <button class="btn btn-info btn-xs" id="button-all">ALL</button>
+            <button class="btn btn-default btn-xs" id="button-in">IN</button>
+            <button class="btn btn-default btn-xs" id="button-out">OUT</button>
         </div>
         <br><br>
         <div id="selWarning">
@@ -396,7 +396,11 @@
         </div>
 
         <div class="attribution">
-            <p>Recreated from <a href="https://centerforspatialresearch.github.io/colombia_site/applications/map.html" target="_blank">Conflict Urbanism: Colombia web map.</a> <br> Credits: <a href="http://c4sr.columbia.edu/" target="_blank">Center for Spatial Research.</a><p>
+            <p>Recreated from <a href="https://centerforspatialresearch.github.io/colombia_site/applications/map.html" 
+                target="_blank">Conflict Urbanism: Colombia web map</a>. <br>
+                Credits:    <a href="http://c4sr.columbia.edu/" target="_blank">Center for Spatial Research</a> &#38;
+                            <a href="http://rni.unidadvictimas.gov.co/RUV">RUV</a>.
+            <p>
         </div>
  
 
@@ -511,7 +515,7 @@
         //START: Basemap Tiles creation
         var OSMLink = '<a href="http://openstreetmap.org">&copy;OpenStreetMap</a>',
             RNVLink = '<a href="http://rni.unidadvictimas.gov.co/RUV">Registro Único de Víctimas</a>',
-            C4SRLink = '<a href="http://http://c4sr.columbia.edu">Center for Spatial Research</a>';
+            C4SRLink = '<a href="http://c4sr.columbia.edu">Center for Spatial Research</a>';
 
         //Carto DarkMatter tiles attribution and URL
         var cartoLink = '<a href="http://cartodb.com/attributions">&copy;CartoDB</a>',
@@ -587,9 +591,9 @@
                     return new L.CircleMarker(latlng, {
                         radius: 5,
                         color: "#e0e0e0",
-                        opacity: 0.85,
-                        weight: 1.6,
-                        dashArray: "2,2",
+                        opacity: 0.95,
+                        weight: 1.2,
+                        dashArray: "2,3",
                         fillOpacity: 0.01,
                     });    
                 };
@@ -597,9 +601,9 @@
                     return new L.CircleMarker(latlng, {
                         radius: 10,
                         color: "#e0e0e0",
-                        opacity: 0.85,
-                        weight: 1.6,
-                        dashArray: "3,3",
+                        opacity: 0.95,
+                        weight: 1.2,
+                        dashArray: "3,5",
                         fillOpacity: 0.01,
                     });    
                 };
@@ -607,9 +611,9 @@
                     return new L.CircleMarker(latlng, {
                         radius: 15,
                         color: "#e0e0e0",
-                        opacity: 0.85,
-                        weight: 1.6,
-                        dashArray: "3,3",
+                        opacity: 0.95,
+                        weight: 1.2,
+                        dashArray: "3,6",
                         fillOpacity: 0.01,
                     });    
                 };
