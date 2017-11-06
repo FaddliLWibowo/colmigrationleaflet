@@ -1,0 +1,199 @@
+/* Legend elements*/
+.legend-text p {
+  height: 10;
+  font-size: 0.7em;
+  /*color: #FFFFFF;*/
+  /*line-height: 10px;*/
+}
+
+.bar-legend{
+  float: left;
+  font-size: 0.1em;
+  width: 12.5%;
+  background-color: rgba(255, 0, 51, 0.50);
+}
+
+.legend-num{
+  width:12.5%;
+  text-align:left;
+  float:left;
+  font-size: 0.75em;
+}
+
+.org-dest-text {
+  width:33.3%; 
+  text-align:left; 
+  float:left;
+}
+
+.legend-text-div {
+  height: 13px;
+}
+
+.circle-legend-out {
+  stroke: #E40066;
+  stroke-width: 1.1;
+  fill: #E40066;
+  fill-opacity: 0.15;
+  stroke-opacity: 0.7;
+}
+
+.circle-legend-in {
+  stroke: #457B9D;
+  stroke-width: 1.1;
+  fill: #457B9D;
+  fill-opacity: 0.15;
+  stroke-opacity: 0.7;
+}
+
+.legend2 {
+  float: left;
+  text-align: left;
+}
+
+.legend-text-s > p {
+  font-size: 0.60em;
+  /*color: #777777;*/
+  line-height: 11px;
+  float: left;
+  margin-left: 10px;
+}
+
+.legend-text-m {
+  font-size: 0.75em;
+  /*color: #777777;*/
+  line-height: 25px;
+  text-align: center;
+  display: flex;
+  align-content: center;
+  flex-direction: column;
+}
+
+.well, {
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.row {
+  margin: 0px;
+}
+
+
+/* SVG Elements*/
+#svg-rules { /* SVG rules generated canvas*/
+  float: right;
+  height: 0px;
+  width: 0px;
+  z-index: -1;
+}
+
+/* Circle fill animation */
+.circle {
+  -webkit-transition: fill-opacity 0.5s, stroke-width 0.5s, stroke-opacity 0.5s; /* For Safari 3.1 to 6.0 */
+  transition: fill-opacity 0.5s, stroke-width 0.5s, stroke-opacity 0.5s;
+}
+.circle:hover {
+  fill-opacity: 0.75;
+  stroke-opacity: 0.4;
+  stroke-width: 5;
+}
+
+.dropdown-list {
+  font-size: 0.8em;
+  margin-right: 3px;
+  float:left;
+}
+
+.btn-xs{
+  font-size: 0.75em;
+}
+
+.buttons-panel {
+  float: left;
+  text-align: left;
+}
+
+.vcenter {
+  display: inline-block;
+  vertical-align: middle;
+  float: none;
+}
+
+/* Statistics bars*/
+.stats-bar {
+  margin-bottom: 0.25px;
+  height: 7px;
+  /*background: rgba(228, 0, 102, 0.6);*/
+  background: rgba(51, 122, 183, 0.5);
+}
+
+.bar-background {
+  overflow: hidden;
+  height: 6px;
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1)
+}
+
+.stat-text{
+  margin-bottom: 6px;
+  font-size: 0.8em;
+  text-align: left;
+}
+
+#munName {
+  text-align: left;
+  font-size: 1.1em;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+
+/* ######## Masacres Map ######## */
+.circle-masacre {
+  -webkit-transition: opacity 0.5s, stroke-width 0.5s, stroke-opacity 0.5s; /* For Safari 3.1 to 6.0 */
+  transition: opacity 0.5s, stroke-width 0.5s, stroke-opacity 0.5s;
+}
+
+.circle-masacre:hover {
+  stroke-width: 15 !important;
+  stroke-opacity: 1;
+  opacity: 0.85;       
+}
+
+/* Masacres legend */
+.legend-masacres-item {
+  float: left;
+  text-align: left;
+  font-size: 0.85em;
+}
+
+#slider-range{
+  width: 100%;
+  margin-right: 10px;
+}
+
+.ui-widget-header {
+  background: rgba(51, 122, 183, 0.6);
+}
+
+#slider-time-text {
+  /*width: 20%;*/
+  background-color: #F5F5F3;
+  border: 0;
+  font-weight: bold;
+  font-size: 1.1em;
+  width: 30%;
+  color: rgba(51, 122, 183, 0.8)
+}
+
+/* Points popup */
+.leaflet-popup-content {
+  font-family: 'Open Sans', Helvetica, sans-serif;
+  font-size: 1em;
+}
+
+.link {
+  text-align: right;
+}

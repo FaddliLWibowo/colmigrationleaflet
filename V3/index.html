@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script type="text/javascript"> var timerStart = Date.now(); </script>
+
+  <meta charset="UTF-8">
+  <title>Map Template</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- ################### 3rd Party JS and CSS ################### -->
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+  <!-- jQuery UI -->
+  <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/blitzer/jquery-ui.css">
+  <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"
+    integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E="
+    crossorigin="anonymous"></script>
+
+  <!-- Font Awesome -->
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css" integrity="sha512-M2wvCLH6DSRazYeZRIm1JnYyh22purTM+FDB5CsyxtQJYeKq83arPe5wgbNmcFXGqiSH2XR8dT/fJISVA1r/zQ==" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js" integrity="sha512-lInM/apFSqyy1o6s89K4iQUKg6ppXEgsVxT35HbzUupEVRh2Eu9Wdl4tHj7dZO0s1uvplcYGmt3498TtHq+log==" crossorigin=""></script>
+
+  <!-- Leaflet Plugins -->
+  <!-- Sidebar v1 -->
+  <script type="text/javascript" src="js/sidebar/L.Control.Sidebar.js"></script>
+  <link rel="stylesheet" type="text/css" href="js/sidebar/L.Control.Sidebar.css">
+  <!-- Mapzen Geocoder -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.9.4/leaflet-geocoder-mapzen.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-geocoder-mapzen/1.9.4/leaflet-geocoder-mapzen.js"></script>
+  <!-- Easy Buttons -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-easybutton@2.0.0/src/easy-button.css">
+  <script src="https://unpkg.com/leaflet-easybutton@2.0.0/src/easy-button.js"></script>
+  <!-- Leaflet Hash -->
+  <script type="text/javascript" src="js/hash/leaflet-hash.js"></script>
+  <!-- Leaflet Fullscreen -->
+  <!-- <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/Leaflet.fullscreen.min.js'></script> -->
+  <!-- <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v1.0.1/leaflet.fullscreen.css' rel='stylesheet' /> -->
+  <!-- Leaflet Geo Locate Control -->
+  <script src='js/locate-control/L.Control.Locate.min.js'></script>
+  <link href='js/locate-control/L.Control.Locate.min.css' rel='stylesheet' />
+  <!-- Leaflet Omnivore -->
+  <script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-omnivore/v0.3.1/leaflet-omnivore.min.js'></script>
+  <!-- Leaflet EasyPrint -->
+  <!-- <script src='js/easy-print/leaflet-easy-print-bundle.js'></script> -->
+  <!-- jquery-csv -->
+  <script src="js/jquery-csv/jquery.csv.min.js"></script>
+  <!-- Leaflet heatmap -->
+  <script src="js/leaflet-heat/leaflet-heat.js"></script>
+
+  <!-- Load animation tweening lib requirement for CanvasFlowMapLayer -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/16.6.0/Tween.min.js"></script>
+
+  <!-- CanvasFlowMapLayer library -->
+  <script src="js/canvasflowmap/CanvasFlowmapLayer.js"></script>
+
+  <!-- Papa CSV parsing libary just for this demo  -->
+  <script src="https://unpkg.com/papaparse@4.3.5/papaparse.min.js"></script>
+  <!-- D3.js -->
+  <script src="https://d3js.org/d3.v3.min.js"></script>
+  
+  <!-- ################### Custom CSS File ################### -->
+  <link rel="stylesheet" type="text/css" href="css/template-custom-style.css">
+  <link rel="stylesheet" type="text/css" href="css/map-custom-style.css">
+</head>
+  
+<body>
+
+  <div class="blank" style="display: none;"></div>
+
+    <!-- Modal: Map Info -->
+    <div id="infomodal" class="modal fade"  role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h3 class="modal-title">Information about Map</h3>
+          </div>
+
+          <div class="modal-body">
+            <p>Some text in the modal about the map.</p>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div> <!-- /close modal -->
+
+  <div id="map"></div> <!-- Map container -->
+
+  <div id="sidebar">
+    <!-- Map description elements -->
+    <div id="mapTitle"><h3>MAPPING THE COLOMBIAN CONFLICT</h3></div>
+    <div id="mapSubtitle"><h6><b>Using <a href="http://leafletjs.com">Leaflet.js</a> as web mapping tool.</b></h6></div><hr />
+    
+    <!-- Map legend elements -->
+    <div id="mapLegend" class="row well">
+      <h5 style="margin-top: 0px"><b>Reported displaced people (1985 - 2015)</b></h5>  
+      <!-- <div class="legend-text" style="height:2px;">
+        <div class="legend-text-div" style="width:33.3%; text-align:left; float:left;"><p><b>ORIGIN</b></p></div>
+        <div class="legend-text-div" style="width:33.3%; text-align:center; float:left;"><p><i class="fa fa-long-arrow-right" aria-hidden="true"></i></p></div>
+        <div class="legend-text-div" style="width:33.3%; text-align:right; float:left;"><p><b>DESTINATION</b></p></div>
+      </div> -->
+
+      <div class="legend-bar"> <!-- Colors modified by colorBars() -->
+        <div class="bar-legend" style="height:1px;"></div>
+        <div class="bar-legend" style="height:1px;"></div>
+        <div class="bar-legend" style="height:2.5px;"></div>
+        <div class="bar-legend" style="height:2.5px;"></div>
+        <div class="bar-legend" style="height:4px;"></div>
+        <div class="bar-legend" style="height:4px;"></div>
+        <div class="bar-legend" style="height:6.5px;"></div>
+        <div class="bar-legend" style="height:8px;"></div>
+      </div>
+
+      <div>
+          <div class="legend-num"><p> >100 </p></div>
+          <div class="legend-num"><p></p></div>
+          <div class="legend-num"><p> 3000 </p></div>
+          <div class="legend-num"><p></p></div>
+          <div class="legend-num"><p> 5 000 </p></div>
+          <div class="legend-num"><p></p></div>
+          <div class="legend-num"><p> 10 000</p></div>
+          <div class="legend-num"><p> >20 000 </p></div> 
+      </div>
+
+      <div>
+        <div class="legend2 legend-text-m" style="width:50%;"><strong>EXPELLING MUNICIPALITY (# people)</strong> </div>
+        <div class="legend2 legend-text-m" style="width:50%;"><strong>RECEIVING MUNICIPALITY (# people)</strong></div>
+      </div>
+      <div>
+        <div class="legend2 legend-text-m" style="width:10%;">&emsp;</div>
+        <div class="legend2" style="width:10%;">
+            <svg width="50" height="50">
+                <circle class="circle-legend-out" cx="25" cy="30" r="6" />
+                <circle class="circle-legend-out" cx="25" cy="24" r="12" />
+                <circle class="circle-legend-out" cx="25" cy="19" r="18" />
+            </svg>
+        </div>
+        <div class="legend2 legend-text-s" style="width: 25%; margin-left: 5px;"> <p> >70 000 <br> 40 000 — 70 000 <br> 10 000 - 40 000<p> </div>
+        
+        <div class="legend2 legend-text-m" style="width:10%;">&emsp;</div>
+        <div class="legend2" style="width:10%;">
+            <svg width="50" height="50">
+                <circle class="circle-legend-in" cx="25" cy="30" r="6" />
+                <circle class="circle-legend-in" cx="25" cy="24" r="12" />
+                <circle class="circle-legend-in" cx="25" cy="19" r="18" />
+            </svg>
+        </div>
+        <div class="legend2 legend-text-s" style="width: 25%; margin-left: 5px;"> <p> >100 000 <br> 50 000 — 100 0000 <br> 10 000 — 50 000<p> </div>
+      </div>
+
+      <div class="buttons-panel vcenter row">
+        <select id="munList" class="dropdown-list vcenter" onchange="getMunFromArray(munArray)">
+          <option value="default" selected disabled hidden>Choose a Municipality</option>
+          <option value='5002'>ABEJORRAL</option>
+          <option value='50006'>ACACÍAS</option>
+          <option value='27006'>ACANDÍ</option>
+          <option value='41006'>ACEVEDO</option>
+          <option value='13006'>ACHÍ</option>
+          <option value='20011'>AGUACHICA</option>
+          <option value='20013'>AGUSTÍN CODAZZI</option>
+          <option value='41020'>ALGECIRAS</option>
+          <option value='13030'>ALTOS DEL ROSARIO</option>
+          <option value='5040'>ANORÍ</option>
+          <option value='5045'>APARTADÓ</option>
+          <option value='47053'>ARACATACA</option>
+          <option value='81001'>ARAUCA</option>
+          <option value='81065'>ARAUQUITA</option>
+          <option value='5051'>ARBOLETES</option>
+          <option value='5055'>ARGELIA DE MARÍA</option>
+          <option value='19050'>ARGELIA</option>
+          <option value='63001'>ARMENIA</option>
+          <option value='73067'>ATACO</option>
+          <option value='23068'>AYAPEL</option>
+          <option value='27073'>BAGADÓ</option>
+          <option value='19075'>BALBOA</option>
+          <option value='52079'>BARBACOAS</option>
+          <option value='68081'>BARRANCABERMEJA</option>
+          <option value='13074'>BARRANCO DE LOBA</option>
+          <option value='8001'>BARRANQUILLA</option>
+          <option value='20045'>BECERRIL</option>
+          <option value='18094'>BELÉN DE LOS ANDAQUÍES</option>
+          <option value='27099'>BELLAVISTA</option>
+          <option value='5088'>BELLO</option>
+          <option value='27425'>BETÉ</option>
+          <option value='5093'>BETULIA</option>
+          <option value='52490'>BOCAS DE SATINGA</option>
+          <option value='11001'>BOGOTÁ D.C.</option>
+          <option value='19100'>BOLÍVAR</option>
+          <option value='20060'>BOSCONIA</option>
+          <option value='68001'>BUCARAMANGA</option>
+          <option value='76109'>BUENAVENTURA</option>
+          <option value='19110'>BUENOS AIRES</option>
+          <option value='5120'>CÁCERES</option>
+          <option value='19130'>CAJIBÍO</option>
+          <option value='19142'>CALOTO</option>
+          <option value='13160'>CANTAGALLO</option>
+          <option value='5147'>CAREPA</option>
+          <option value='13001'>CARTAGENA DE INDIAS</option>
+          <option value='18150'>CARTAGENA DEL CHAIRÁ</option>
+          <option value='5893'>CASABE</option>
+          <option value='5154'>CAUCASIA</option>
+          <option value='70230'>CHALÁN</option>
+          <option value='73168'>CHAPARRAL</option>
+          <option value='5172'>CHIGORODÓ</option>
+          <option value='20175'>CHIMICHAGUA</option>
+          <option value='20178'>CHIRIGUANÁ</option>
+          <option value='47170'>CHIVOLO</option>
+          <option value='47189'>CIÉNAGA</option>
+          <option value='68190'>CIMITARRA</option>
+          <option value='5197'>COCORNÁ</option>
+          <option value='41206'>COLOMBIA</option>
+          <option value='54206'>CONVENCIÓN</option>
+          <option value='13212'>CÓRDOBA</option>
+          <option value='70215'>COROZAL</option>
+          <option value='73217'>COYAIMA</option>
+          <option value='54001'>CÚCUTA</option>
+          <option value='99773'>CUMARIBO</option>
+          <option value='52233'>CUMBITARA</option>
+          <option value='27150'>CURBARADÓ</option>
+          <option value='18205'>CURILLO</option>
+          <option value='20228'>CURUMANÍ</option>
+          <option value='5234'>DABEIBA</option>
+          <option value='76233'>DAGUA</option>
+          <option value='44090'>DIBULLA</option>
+          <option value='66170'>DOSQUEBRADAS</option>
+          <option value='5250'>EL BAGRE</option>
+          <option value='47245'>EL BANCO</option>
+          <option value='19532'>EL BORDO</option>
+          <option value='54245'>EL CARMEN</option>
+          <option value='27245'>EL CARMEN DE ATRATO</option>
+          <option value='13244'>EL CARMEN DE BOLÍVAR</option>
+          <option value='5148'>EL CARMEN DE VIBORAL</option>
+          <option value='50251'>EL CASTILLO</option>
+          <option value='52250'>EL CHARCO</option>
+          <option value='20238'>EL COPEY</option>
+          <option value='18247'>EL DONCELLO</option>
+          <option value='18256'>EL PAUJÍL</option>
+          <option value='47258'>EL PIÑÓN</option>
+          <option value='47268'>EL RETÉN</option>
+          <option value='95025'>EL RETORNO</option>
+          <option value='19256'>EL TAMBO</option>
+          <option value='54250'>EL TARRA</option>
+          <option value='18001'>FLORENCIA</option>
+          <option value='68276'>FLORIDABLANCA</option>
+          <option value='44279'>FONSECA</option>
+          <option value='81300'>FORTUL</option>
+          <option value='5284'>FRONTINO</option>
+          <option value='47288'>FUNDACIÓN</option>
+          <option value='25290'>FUSAGASUGÁ</option>
+          <option value='41298'>GARZÓN</option>
+          <option value='68307'>GIRÓN</option>
+          <option value='5313'>GRANADA</option>
+          <option value='50313'>GRANADA</option>
+          <option value='76111'>GUADALAJARA DE BUGA</option>
+          <option value='19318'>GUAPÍ</option>
+          <option value='70265'>GUARANDA</option>
+          <option value='54344'>HACARÍ</option>
+          <option value='73001'>IBAGUÉ</option>
+          <option value='52356'>IPIALES</option>
+          <option value='52696'>ISCUANDÉ</option>
+          <option value='27361'>ISTMINA</option>
+          <option value='5360'>ITAGÜÍ</option>
+          <option value='5361'>ITUANGO</option>
+          <option value='76364'>JAMUNDÍ</option>
+          <option value='86865'>LA HORMIGA</option>
+          <option value='20400'>LA JAGUA DE IBIRICO</option>
+          <option value='50350'>LA MACARENA</option>
+          <option value='18410'>LA MONTAÑITA</option>
+          <option value='25394'>LA PALMA</option>
+          <option value='41396'>LA PLATA</option>
+          <option value='5400'>LA UNIÓN</option>
+          <option value='19397'>LA VEGA</option>
+          <option value='68406'>LEBRIJA</option>
+          <option value='50400'>LEJANÍAS</option>
+          <option value='73411'>LÍBANO</option>
+          <option value='19418'>LÓPEZ</option>
+          <option value='70418'>LOS PALMITOS</option>
+          <option value='13430'>MAGANGUÉ</option>
+          <option value='44430'>MAICAO</option>
+          <option value='8433'>MALAMBO</option>
+          <option value='17001'>MANIZALES</option>
+          <option value='50325'>MAPIRIPÁN</option>
+          <option value='13442'>MARÍA LA BAJA</option>
+          <option value='5440'>MARINILLA</option>
+          <option value='5001'>MEDELLÍN</option>
+          <option value='19450'>MERCADERES</option>
+          <option value='50330'>MESETAS</option>
+          <option value='18460'>MILÁN</option>
+          <option value='95200'>MIRAFLORES</option>
+          <option value='86001'>MOCOA</option>
+          <option value='13458'>MONTECRISTO</option>
+          <option value='23466'>MONTELÍBANO</option>
+          <option value='23001'>MONTERÍA</option>
+          <option value='13473'>MORALES</option>
+          <option value='19473'>MORALES</option>
+          <option value='5480'>MUTATÁ</option>
+          <option value='5483'>NARIÑO</option>
+          <option value='73483'>NATAGAIMA</option>
+          <option value='5495'>NECHÍ</option>
+          <option value='5490'>NECOCLÍ</option>
+          <option value='41001'>NEIVA</option>
+          <option value='54498'>OCAÑA</option>
+          <option value='86320'>ORITO</option>
+          <option value='73504'>ORTEGA</option>
+          <option value='70508'>OVEJAS</option>
+          <option value='20517'>PAILITAS</option>
+          <option value='76520'>PALMIRA</option>
+          <option value='20550'>PELAYA</option>
+          <option value='17541'>PENSILVANIA</option>
+          <option value='5543'>PEQUE</option>
+          <option value='66001'>PEREIRA</option>
+          <option value='19533'>PIAMONTE</option>
+          <option value='27025'>PIE DE PATO</option>
+          <option value='68547'>PIEDECUESTA</option>
+          <option value='41551'>PITALITO</option>
+          <option value='47551'>PIVIJAY</option>
+          <option value='27077'>PIZARRO</option>
+          <option value='73555'>PLANADAS</option>
+          <option value='23555'>PLANETA RICA</option>
+          <option value='47555'>PLATO</option>
+          <option value='52540'>POLICARPA</option>
+          <option value='19001'>POPAYÁN</option>
+          <option value='47980'>PRADO - SEVILLA</option>
+          <option value='20570'>PUEBLO BELLO</option>
+          <option value='66572'>PUEBLO RICO</option>
+          <option value='86568'>PUERTO ASÍS</option>
+          <option value='5579'>PUERTO BERRÍO</option>
+          <option value='86569'>PUERTO CAICEDO</option>
+          <option value='50450'>PUERTO CONCORDIA</option>
+          <option value='86571'>PUERTO GUZMÁN</option>
+          <option value='86573'>PUERTO LEGUÍZAMO</option>
+          <option value='23580'>PUERTO LIBERTADOR</option>
+          <option value='50577'>PUERTO LLERAS</option>
+          <option value='13810'>PUERTO RICO</option>
+          <option value='18592'>PUERTO RICO</option>
+          <option value='50590'>PUERTO RICO</option>
+          <option value='68575'>PUERTO WILCHES</option>
+          <option value='66594'>QUINCHÍA</option>
+          <option value='5604'>REMEDIOS</option>
+          <option value='47605'>REMOLINO</option>
+          <option value='52612'>RICAURTE</option>
+          <option value='70204'>RICAURTE (COLOSO)</option>
+          <option value='13600'>RÍO VIEJO</option>
+          <option value='73616'>RIOBLANCO</option>
+          <option value='44001'>RIOHACHA</option>
+          <option value='5615'>RIONEGRO</option>
+          <option value='17614'>RIOSUCIO</option>
+          <option value='27615'>RIOSUCIO</option>
+          <option value='20621'>ROBLES</option>
+          <option value='73624'>ROVIRA</option>
+          <option value='68655'>SABANA DE TORRES</option>
+          <option value='17662'>SAMANÁ</option>
+          <option value='52678'>SAMANIEGO</option>
+          <option value='47660'>SAN ÁNGEL</option>
+          <option value='73675'>SAN ANTONIO</option>
+          <option value='70678'>SAN BENITO ABAD</option>
+          <option value='54670'>SAN CALIXTO</option>
+          <option value='5649'>SAN CARLOS</option>
+          <option value='20750'>SAN DIEGO</option>
+          <option value='5652'>SAN FRANCISCO</option>
+          <option value='27001'>SAN FRANCISCO DE QUIBDO</option>
+          <option value='13654'>SAN JACINTO</option>
+          <option value='52621'>SAN JOSÉ</option>
+          <option value='18610'>SAN JOSÉ DEL FRAGUA</option>
+          <option value='95001'>SAN JOSÉ DEL GUAVIARE</option>
+          <option value='52001'>SAN JUAN DE PASTO</option>
+          <option value='5659'>SAN JUAN DE URABÁ</option>
+          <option value='44650'>SAN JUAN DEL CESAR</option>
+          <option value='13657'>SAN JUAN NEPOMUCENO</option>
+          <option value='5660'>SAN LUIS</option>
+          <option value='13667'>SAN MARTÍN DE LOBA</option>
+          <option value='86757'>SAN MIGUEL</option>
+          <option value='70713'>SAN ONOFRE</option>
+          <option value='13670'>SAN PABLO</option>
+          <option value='5664'>SAN PEDRO DE LOS MILAGROS</option>
+          <option value='5665'>SAN PEDRO DE URABÁ</option>
+          <option value='5667'>SAN RAFAEL</option>
+          <option value='68689'>SAN VICENTE DE CHUCURÍ</option>
+          <option value='18753'>SAN VICENTE DEL CAGUÁN</option>
+          <option value='47001'>SANTA MARTA</option>
+          <option value='13683'>SANTA ROSA DE LIMA</option>
+          <option value='13688'>SANTA ROSA DEL SUR</option>
+          <option value='19698'>SANTANDER DE QUILICHAO</option>
+          <option value='76001'>SANTIAGO DE CALI</option>
+          <option value='81736'>SARAVENA</option>
+          <option value='54720'>SARDINATA</option>
+          <option value='5736'>SEGOVIA</option>
+          <option value='13744'>SIMITÍ</option>
+          <option value='70001'>SINCELEJO</option>
+          <option value='47745'>SITIONUEVO</option>
+          <option value='25754'>SOACHA</option>
+          <option value='18756'>SOLANO</option>
+          <option value='8758'>SOLEDAD</option>
+          <option value='18785'>SOLITA</option>
+          <option value='5756'>SONSÓN</option>
+          <option value='52418'>SOTOMAYOR</option>
+          <option value='19780'>SUÁREZ</option>
+          <option value='70771'>SUCRE</option>
+          <option value='27787'>TADÓ</option>
+          <option value='81794'>TAME</option>
+          <option value='52786'>TAMINANGO</option>
+          <option value='5790'>TARAZÁ</option>
+          <option value='54800'>TEORAMA</option>
+          <option value='54810'>TIBÚ</option>
+          <option value='23807'>TIERRALTA</option>
+          <option value='19809'>TIMBIQUÍ</option>
+          <option value='70823'>TOLÚ VIEJO</option>
+          <option value='19821'>TORIBÍO</option>
+          <option value='76834'>TULUÁ</option>
+          <option value='52835'>TUMACO</option>
+          <option value='5837'>TURBO</option>
+          <option value='27800'>UNGUÍA</option>
+          <option value='5847'>URRAO</option>
+          <option value='5854'>VALDIVIA</option>
+          <option value='23855'>VALENCIA</option>
+          <option value='20001'>VALLEDUPAR</option>
+          <option value='18860'>VALPARAÍSO</option>
+          <option value='5873'>VIGÍA DEL FUERTE</option>
+          <option value='86885'>VILLAGARZÓN</option>
+          <option value='44874'>VILLANUEVA</option>
+          <option value='50001'>VILLAVICENCIO</option>
+          <option value='25878'>VIOTÁ</option>
+          <option value='50711'>VISTAHERMOSA</option>
+          <option value='5887'>YARUMAL</option>
+          <option value='85001'>YOPAL</option>
+          <option value='13894'>ZAMBRANO</option>
+          <option value='5895'>ZARAGOZA</option>
+        </select>
+
+        <!-- Paths buttons -->
+        <button class="btn btn-success btn-xs" id="button-animate">ANIMATE</button>
+        <button class="btn btn-info btn-xs" id="button-all">ALL</button>
+        <button class="btn btn-default btn-xs" id="button-in">IN</button>
+        <button class="btn btn-default btn-xs" id="button-out">OUT</button>
+      </div> <!-- /close buttons-panel -->
+      <!-- Heatmap buttons-->
+      <div class="row vcenter">
+        <button class="btn btn-success btn-xs" id="button-toggle-municip">Circles</button>
+        <!-- <button class="btn btn-success btn-xs" id="button-toggle-pathlayer">Paths</button> -->
+        <button class="btn btn-danger btn-xs" id="button-toggle-disp-hmap">Displacement Heatmap</button>
+        <button class="btn btn-danger btn-xs" id="button-toggle-recep-hmap">Reception Heatmap</button>
+      </div>
+
+      <div id="infoBars" style="display: none;">
+        <h4 id="munName" style="text-align: left;"></h4>
+        <!-- <p id="subMunName">Displacement Statistics</p> -->
+        <div class="bar-background"><div id="pop1985" class="stats-bar"></div></div>
+        <p id="pop1985text" class="stat-text"></p>
+        <div class="bar-background"><div id="pop2015" class="stats-bar"></div></div>
+        <p id="pop2015text" class="stat-text"></p>
+        <div class="bar-background"><div id="statOut" class="stats-bar"></div></div>
+        <p id="statOutText" class="stat-text"></p>
+        <div class="bar-background"><div id="statIn" class="stats-bar"></div></div>
+        <p id="statInText" class="stat-text"></p>
+        <div class="bar-background"><div id="statInternal" class="stats-bar"></div></div>
+        <p id="statInternalText" class="stat-text"></p>
+        <div class="bar-background"><div id="statTotal" class="stats-bar"></div></div>
+        <p id="statTotalText" class="stat-text"></p>
+      </div>
+
+    </div> <!-- /close Map Legend 1 -->
+
+    <hr/>
+
+    <div class="legend-masacres well">
+
+      <div style="margin-bottom: 5px">
+        <div><h5 style="margin: 2px 5px 0px 0px; float: left;"><b>Massacres by perpetrator (1982 - 2013)</b></h5></div>
+        <div><button class="btn btn-danger btn-xs vcenter" id="button-toggle-masacres">Toogle Layer</button></div>
+      </div>
+
+      <div id="masacres-perpetrators" style="display: none;">
+        <div>
+          <div class="legend-masacres-item" style="opacity: .6; width: 10%; text-align: center;"><i class="fa fa-circle" style="color: #d62728"></i></div>
+          <div class="legend-masacres-item" style="width: 50%">PARAMILITARES</div>
+          <div class="legend-masacres-item" style="width: 10%"><input id="inputP" class="checkbox" type="checkbox" value="inputP" checked></div>
+        </div>
+        <br>
+        <div>
+          <div class="legend-masacres-item" style="opacity: .6; width: 10%; text-align: center;"><i class="fa fa-circle" style="color: #2ca02c"></i></div>
+          <div class="legend-masacres-item" style="width: 50%">GUERRILLAS</div>
+          <div class="legend-masacres-item" style="width: 10%"><input id="inputG" class="checkbox" type="checkbox" value="inputG" checked></div>
+        </div>
+        <br>
+        <div>
+          <div class="legend-masacres-item" style="opacity: .6; width: 10%; text-align: center;"><i class="fa fa-circle" style="color: #9467bd"></i></div>
+          <div class="legend-masacres-item" style="width: 50%">BACRIM (Criminal groups)</div>
+          <div class="legend-masacres-item" style="width: 10%"><input id="inputB" class="checkbox" type="checkbox" value="inputB" checked></div>
+        </div>
+        <br>
+        <div>
+          <div class="legend-masacres-item" style="opacity: .6; width: 10%; text-align: center;"><i class="fa fa-circle" style="color: #17becf"></i></div>
+          <div class="legend-masacres-item" style="width: 50%">MILITARY FORCES</div>
+          <div class="legend-masacres-item" style="width: 10%"><input id="inputFP" class="checkbox" type="checkbox" value="inputFP" checked></div>
+        </div>
+        <br>
+        <div>
+          <div class="legend-masacres-item" style="opacity: .6; width: 10%; text-align: center;"><i class="fa fa-circle" style="color: #bcbd22"></i></div>
+          <div class="legend-masacres-item" style="width: 50%">UNIDENTIFIED</div>
+          <div class="legend-masacres-item" style="width: 10%"><input id="inputNI" class="checkbox" type="checkbox" value="inputNI" checked></div>
+        </div>
+      </div>
+
+      <!-- Time slider -->
+      <br><div id="time-slider" style="margin-top: 10px; display: none;">
+        <label for="amount">&nbsp;<b class="legend-masacres-item" style="margin-top: 2px">Select a time period from the slider:&emsp;</b></label><input type="text" id="slider-time-text" readonly>
+        <div id="slider-range"></div>
+      </div>
+
+    </div> <!-- /close legend masacres -->
+    <hr/>
+
+    <!-- Show / Hide Tools Buttons -->
+    <button id="showTools" type="button" class="btn btn-default btn-xs btn-block">Show Map Tools Legend</button>
+    <button id="hideTools" type="button" class="btn btn-default btn-xs btn-block" style="display:none;">Hide Map Tools Legend</button>
+
+    <!-- Tools Legend -->
+    <div class="toolLegend" style="display:none;"> <hr />
+      <div class="list-group" style="text-align:left;">
+        <li class="list-group-item"><i class="fa fa-bars fa-fw fa-lg"></i>&ensp;Show Sidebar</li>
+        
+        <li class="list-group-item"><i class="fa fa-caret-left fa-fw fa-lg" aria-hidden="true"></i>&ensp;Hide Sidebar</li>
+        
+        <li class="list-group-item"><i class="fa fa-arrows-alt fa-fw fa-lg" aria-hidden="true"></i>&ensp;Fullscreen</li>
+        
+        <li class="list-group-item"><i class="fa fa-globe fa-fw fa-lg" aria-hidden="true"></i>&ensp;Default Map Extent</li>
+        
+        <li class="list-group-item"><i class="fa fa-map-marker fa-fw fa-lg" aria-hidden="true"></i>&ensp;Show your Location (Geolocate)</li>
+        
+        <li class="list-group-item"><i class="fa fa-search fa-fw fa-lg" aria-hidden="true"></i>&ensp;Search Location (Geocoder by Mapzen&copy;)</li>
+        
+        <li class="list-group-item"><img src="css/img/layers-bl.png" style="margin-left: 1px; padding:0 1px;width:18px;">&ensp;Toggle Map Layers</li>
+      </div>
+    </div>
+
+    
+
+    <!-- Sidebar footer -->
+    <div id="mapNote"><hr />
+      <div id="sidebarFooter">
+        <a href="http://cccruzr.github.io" target="blank" class="btn btn-xs"><i class="fa fa-user"></i> Camilo Cruz</a> |
+        <a id="infoanchor" class="btn btn-xs"><i class="fa fa-info-circle"></i> Map Info</a> |
+        <a id="feedback" class="btn btn-xs" href="https://docs.google.com/forms/d/e/1FAIpQLSciWeQnJSH1S8jVh6roMUMgtG7bFxspJRyq4xeWe--XVSLLKA/viewform?usp=sf_link" target="blank"><i class="fa fa-comment-o"></i> Feedback</a>
+      </div>
+      <span class="small text-muted">Updated: 14/09/2017</span>
+    </div> <!-- /close mapNote -->    
+  </div> <!-- /close sidebar -->
+
+
+  <!-- ################### JavaScript external scripts ################### -->
+  <!-- Modify HTML Layout Elements -->
+  <script type="text/javascript" src="js/html-elements.js"></script>
+  <!-- Map elements -->
+  <script type="text/javascript" src="js/map-elements.js"></script>
+
+  <script> // Google Analytics
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-105176628-1', 'auto');
+      ga('send', 'pageview');
+  </script>
+  
+</body>
+
+</html>
